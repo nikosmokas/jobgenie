@@ -1,7 +1,64 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import re
 import pdfplumber
 import docx
 from email_validator import validate_email, EmailNotValidError
+from google import genai
+import os
+import json
+
+# The client gets the API key from GEMINI_API_KEY environment variable
+client = genai.Client()
+
+# The schema for the LLM to follow
+CV_SCHEMA = '''{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CV Schema",
+  "description": "Schema for structured CV data extracted from a resume",
+  "type": "object",
+  "properties": {
+    "name": {"type": "string"},
+    "email": {"type": "string", "format": "email"},
+    "phone": {"type": "string"},
+    "location": {"type": ["string", "null"]},
+    "skills": {"type": "array", "items": {"type": "string"}},
+    "experience_years": {"type": ["number", "null"]},
+    "experience": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {"type": "string"},
+          "company": {"type": "string"},
+          "location": {"type": "string"},
+          "start_date": {"type": "string", "format": "date"},
+          "end_date": {"type": ["string", "null"], "format": "date"},
+          "description": {"type": "string"}
+        },
+        "required": ["title", "company"]
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "degree": {"type": "string"},
+          "field": {"type": "string"},
+          "institution": {"type": "string"},
+          "start_date": {"type": "string", "format": "date"},
+          "end_date": {"type": ["string", "null"], "format": "date"}
+        },
+        "required": ["degree", "institution"]
+      }
+    },
+    "languages": {"type": "array", "items": {"type": "string"}},
+    "certifications": {"type": "array", "items": {"type": "string"}}
+  },
+  "required": ["name", "email", "skills"]
+}'''
 
 # -----------------------------
 # File extraction functions
@@ -92,3 +149,22 @@ def parse_cv_text(text: str) -> dict:
         "education": extract_education(text)
     }
     return profile
+
+def parse_cv_text_with_llm(cv_text: str) -> dict:
+    prompt = f"""
+Extract structured metadata from this CV. Output only valid JSON matching this schema:
+{CV_SCHEMA}
+CV:
+{cv_text}
+"""
+    response = client.models.generate_content(
+        model="gemini-3-flash-preview", contents=prompt
+    )
+    # Try to extract JSON from the response
+    try:
+        content = response.text.strip()
+        if content.startswith("```"):
+            content = content.split("\n", 1)[1].rsplit("\n", 1)[0]
+        return json.loads(content)
+    except Exception as e:
+        raise ValueError(f"Failed to parse LLM response as JSON: {e}\nRaw response: {response.text}")

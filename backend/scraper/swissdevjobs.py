@@ -7,15 +7,28 @@ BASE_URL = "https://www.swissdevjobs.ch/jobs"
 
 async def scroll_until_loaded(page):
     previous_count = 0
+
     while True:
-        await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-        await page.wait_for_timeout(2000)
+        # scroll the job list container
+        await page.evaluate("""
+            const container = document.querySelector('#job-postings-inner-wrapper');
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
+        """)
+
+        await page.wait_for_timeout(1500)
+
         current_count = await page.eval_on_selector_all(
             "#job-postings-inner-wrapper li",
             "els => els.length"
         )
+
+        print(f"Loaded jobs: {current_count}")
+
         if current_count == previous_count:
             break
+
         previous_count = current_count
 
 
@@ -78,7 +91,15 @@ async def scrape_swissdevjobs():
 
                 # Location
                 try:
-                    location = await page.text_content("span.icon-map-marker") or ""
+                    location_div = await page.query_selector("div[aria-label='hiring organization address']")
+                    if location_div:
+                        location_span = await location_div.query_selector("span:not([aria-hidden])")
+                        if location_span:
+                            location = await location_span.inner_text()
+                        else:
+                            location = await location_div.inner_text()
+                    else:
+                        location = ""
                 except:
                     location = ""
 
