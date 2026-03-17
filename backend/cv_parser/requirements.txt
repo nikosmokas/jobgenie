@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+pdfplumber
+python-docx
+pydantic
+email-validator
+python-multipart
+google-genai

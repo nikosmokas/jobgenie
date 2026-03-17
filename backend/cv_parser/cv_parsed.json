@@ -1,0 +1,70 @@
+{
+  "name": "NIKOLAOS MOKAS",
+  "email": "nikosmokas@hotmail.gr",
+  "phone": "(+30) 6971953461",
+  "location": "54248, Thessaloniki, Greece",
+  "skills": [
+    "C#",
+    "Java",
+    "Python",
+    "SQL",
+    "Bash/Shell",
+    "REST",
+    "microservices",
+    "Databricks pipelines",
+    "AWS Lambda",
+    "EC2",
+    "S3",
+    "Aurora",
+    "DataSync",
+    "Terraform",
+    "Docker",
+    "Kubernetes",
+    "Git",
+    "Github Actions",
+    "automated deployment pipelines",
+    "Linux",
+    "Windows",
+    "FSx",
+    "EventBridge",
+    "CI/CD",
+    ".NET",
+    "React",
+    "Node.js",
+    "Express",
+    "MongoDB"
+  ],
+  "experience_years": 2.1,
+  "experience": [
+    {
+      "title": "SENIOR ASSOCIATE SOLUTION ENGINEER",
+      "company": "PFIZER",
+      "location": "THESSALONIKI, GREECE",
+      "start_date": "2024-10-21",
+      "end_date": null,
+      "description": "Architected and delivered the Benchtop Monitoring App pipeline using Terraform and AWS services. Designed a resilient 6-layer Windows service (C#/.NET) with bulk-mode detection. Re-engineered CIM & anonymization pipelines using Python and Databricks. Modernized Lambda workloads and infrastructure with Terraform modules. Maintained and stabilized ROAR infrastructure."
+    },
+    {
+      "title": "SOFTWARE ENGINEER",
+      "company": "INTRACOM-TELECOM",
+      "location": "THESSALONIKI, GREECE",
+      "start_date": "2022-10-17",
+      "end_date": "2024-10-18",
+      "description": "Java-based back-end development for UniMS. Participated in AGILE/SCRUM workflows. Developed HTTP/SNMP Adapters and Driver APIs. Managed PostgreSQL databases and data modeling. Utilized openJDK, Wildfly, and Spring libraries. Managed CI/CD with Jenkins and containerization with Kubernetes."
+    }
+  ],
+  "education": [
+    {
+      "degree": "MASTER'S IN ELECTRICAL AND COMPUTER ENGINEERING",
+      "field": "ELECTRICAL AND COMPUTER ENGINEERING",
+      "institution": "UNIVERSITY OF THESSALY",
+      "start_date": "2014-08-31",
+      "end_date": "2022-06-01"
+    }
+  ],
+  "languages": [
+    "GREEK",
+    "ENGLISH"
+  ],
+  "certifications": []
+}
